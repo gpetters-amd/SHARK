@@ -201,8 +201,8 @@ print(shark_module.forward((arg0, arg1)))
 | AlexNet            | :green_heart: (Script)         | :green_heart:         | :green_heart:         | :green_heart:            |
 | DenseNet121        | :green_heart: (Script)         |          |          |             |
 | MNasNet1_0         | :green_heart: (Script)         |          |          |             |
-| MobileNetV2        | :green_heart: (Script)         |          |          |             |
-| MobileNetV3        | :green_heart: (Script)         |          |          |             |
+| MobileNetV2        | :green_heart: (Script)         | :green_heart:         |          |             |
+| MobileNetV3        | :green_heart: (Script)         | :green_heart:         |          |             |
 | Unet               | :broken_heart: (Script)         |          |          |             |
 | Resnet18           | :green_heart: (Script)         | :green_heart:         |  :green_heart:        | :green_heart:            |
 | Resnet50           | :green_heart: (Script)         | :green_heart:         |   :green_heart:       | :green_heart:            |

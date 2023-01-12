@@ -3,6 +3,7 @@
 ### To run the complete bloom model: pass as argument "--config bloom".
 
 import argparse
+import io
 import torch
 import torch_mlir
 from transformers import BloomTokenizerFast, BloomForSequenceClassification
@@ -34,7 +35,7 @@ torch.manual_seed(args.seed)
 
 model_config = "bigscience/" + args.config
 tokenizer = BloomTokenizerFast.from_pretrained(model_config)
-test_input = tokenizer(args.prompt, return_tensors="pt")["input_ids"]
+test_input = tokenizer(args.prompt, return_tensors="pt")["input_ids"] #.to("cuda:0")
 
 
 class HuggingFaceLanguage(torch.nn.Module):
@@ -47,9 +48,8 @@ class HuggingFaceLanguage(torch.nn.Module):
     def forward(self, tokens):
         return self.model.forward(tokens)[0]
 
-
-model = HuggingFaceLanguage()
-actual_out = model(test_input)
+model = HuggingFaceLanguage() #.to("cuda:0")
+actual_out = model(test_input) #.to("cuda:0")
 
 # import numpy as np
 # test_input_ny = test_input.detach().numpy()
@@ -89,7 +89,11 @@ def strip_overloads(gm):
 
 strip_overloads(fx_g)
 
+#torch.set_default_dtype(torch.float16)
+#torch.set_default_tensor_type('torch.cuda.HalfTensor')
 ts_g = torch.jit.script(fx_g)
+print(ts_g)
+#torch.set_default_dtype(torch.float32)
 
 module = torch_mlir.compile(
     ts_g,
@@ -100,19 +104,24 @@ module = torch_mlir.compile(
 )
 # # module.dump()
 
-mlir_model = module
-func_name = "forward"
+byte_stream = io.BytesIO()
+module.operation.write_bytecode(byte_stream)
+mlir_model = byte_stream.getvalue()
+#func_name = "forward"
 
+print(args.device)
 shark_module = SharkInference(
-    mlir_model, func_name, device=args.device, mlir_dialect="tm_tensor"
+    mlir_model, device=args.device, mlir_dialect="tm_tensor"
 )
 shark_module.compile()
+
+print(shark_module.get_functions_in_module())
 
 
 def shark_result(x):
     x_ny = x.detach().numpy()
     inputs = (x_ny,)
-    result = shark_module.forward(inputs)
+    result = shark_module.__call__("forward", inputs)
     return torch.from_numpy(result)
 
 

@@ -26,7 +26,7 @@ supported_frontends = {
     "tflite",
 }
 
-
+mlircount = 0
 class SharkImporter:
     """
     SharkImporter converts frontend modules into a
@@ -83,6 +83,18 @@ class SharkImporter:
 
     def _torch_mlir(self, is_dynamic, tracing_required, mlir_type):
         from shark.torch_mlir_utils import get_torch_mlir_module
+
+        global mlircount
+        str_module = torch_mlir.compile(
+            self.module,
+            self.inputs,
+            output_type=torch_mlir.OutputType.TORCH,
+            use_tracing=tracing_required,
+            ignore_traced_shapes=True,
+        )
+        with open(str(mlircount) + "_mlir.mlir", "w") as f:
+            f.write(str_module.operation.get_asm())
+        mlircount += 1
 
         return get_torch_mlir_module(
             self.module,
@@ -546,6 +558,10 @@ def import_with_fx(
 
     ts_graph = torch.jit.script(fx_g)
     inputs = get_f16_inputs(inputs, is_f16, f16_input_mask)
+
+    with open(model_name + "_graph.txt", "w") as f:
+        f.write(ts_graph.code)
+
     mlir_importer = SharkImporter(
         ts_graph,
         inputs,

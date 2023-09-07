@@ -1,6 +1,3 @@
--f https://download.pytorch.org/whl/nightly/cpu/torch_nightly.html
---pre
-
 setuptools
 wheel
 
@@ -18,7 +15,6 @@ Pillow
 parameterized
 
 # Add transformers, diffusers and scipy since it most commonly used
-tokenizers==0.13.3
 transformers
 diffusers
 #accelerate is now required for diffusers import from ckpt.

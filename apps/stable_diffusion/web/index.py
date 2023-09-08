@@ -166,16 +166,16 @@ if __name__ == "__main__":
         modelmanager_sendto_outpaint,
         modelmanager_sendto_upscaler,
         stablelm_chat,
-        minigpt4_web,
-        outputgallery_web,
-        outputgallery_tab_select,
-        outputgallery_watch,
-        outputgallery_filename,
-        outputgallery_sendto_txt2img,
-        outputgallery_sendto_img2img,
-        outputgallery_sendto_inpaint,
-        outputgallery_sendto_outpaint,
-        outputgallery_sendto_upscaler,
+        # minigpt4_web,
+        # outputgallery_web,
+        # outputgallery_tab_select,
+        # outputgallery_watch,
+        # outputgallery_filename,
+        # outputgallery_sendto_txt2img,
+        # outputgallery_sendto_img2img,
+        # outputgallery_sendto_inpaint,
+        # outputgallery_sendto_outpaint,
+        # outputgallery_sendto_upscaler,
     )
 
     # init global sd pipeline and config
@@ -235,21 +235,21 @@ if __name__ == "__main__":
                 outpaint_web.render()
             with gr.TabItem(label="Upscaler", id=4):
                 upscaler_web.render()
-            if args.output_gallery:
-                with gr.TabItem(label="Output Gallery", id=5) as og_tab:
-                    outputgallery_web.render()
+            # if args.output_gallery:
+            #     with gr.TabItem(label="Output Gallery", id=5) as og_tab:
+            #         outputgallery_web.render()
 
                 # extra output gallery configuration
-                outputgallery_tab_select(og_tab.select)
-                outputgallery_watch(
-                    [
-                        txt2img_status,
-                        img2img_status,
-                        inpaint_status,
-                        outpaint_status,
-                        upscaler_status,
-                    ]
-                )
+                # outputgallery_tab_select(og_tab.select)
+                # outputgallery_watch(
+                #     [
+                #         txt2img_status,
+                #         img2img_status,
+                #         inpaint_status,
+                #         outpaint_status,
+                #         upscaler_status,
+                #     ]
+                # )
             with gr.TabItem(label="Model Manager", id=6):
                 model_web.render()
             with gr.TabItem(label="LoRA Training (Experimental)", id=7):
@@ -260,8 +260,8 @@ if __name__ == "__main__":
                 label="Generate Sharding Config (Experimental)", id=9
             ):
                 model_config_web.render()
-            with gr.TabItem(label="MultiModal (Experimental)", id=10):
-                minigpt4_web.render()
+            # with gr.TabItem(label="MultiModal (Experimental)", id=10):
+            #     minigpt4_web.render()
             # with gr.TabItem(label="DocuChat Upload", id=11):
             #     h2ogpt_upload.render()
             # with gr.TabItem(label="DocuChat(Experimental)", id=12):
@@ -364,37 +364,37 @@ if __name__ == "__main__":
             [upscaler_gallery],
             [outpaint_init_image, tabs],
         )
-        if args.output_gallery:
-            register_outputgallery_button(
-                outputgallery_sendto_txt2img,
-                0,
-                [outputgallery_filename],
-                [txt2img_png_info_img, tabs],
-            )
-            register_outputgallery_button(
-                outputgallery_sendto_img2img,
-                1,
-                [outputgallery_filename],
-                [img2img_init_image, tabs],
-            )
-            register_outputgallery_button(
-                outputgallery_sendto_inpaint,
-                2,
-                [outputgallery_filename],
-                [inpaint_init_image, tabs],
-            )
-            register_outputgallery_button(
-                outputgallery_sendto_outpaint,
-                3,
-                [outputgallery_filename],
-                [outpaint_init_image, tabs],
-            )
-            register_outputgallery_button(
-                outputgallery_sendto_upscaler,
-                4,
-                [outputgallery_filename],
-                [upscaler_init_image, tabs],
-            )
+        # if args.output_gallery:
+        #     register_outputgallery_button(
+        #         outputgallery_sendto_txt2img,
+        #         0,
+        #         [outputgallery_filename],
+        #         [txt2img_png_info_img, tabs],
+        #     )
+        #     register_outputgallery_button(
+        #         outputgallery_sendto_img2img,
+        #         1,
+        #         [outputgallery_filename],
+        #         [img2img_init_image, tabs],
+        #     )
+        #     register_outputgallery_button(
+        #         outputgallery_sendto_inpaint,
+        #         2,
+        #         [outputgallery_filename],
+        #         [inpaint_init_image, tabs],
+        #     )
+        #     register_outputgallery_button(
+        #         outputgallery_sendto_outpaint,
+        #         3,
+        #         [outputgallery_filename],
+        #         [outpaint_init_image, tabs],
+        #     )
+        #     register_outputgallery_button(
+        #         outputgallery_sendto_upscaler,
+        #         4,
+        #         [outputgallery_filename],
+        #         [upscaler_init_image, tabs],
+        #     )
         register_modelmanager_button(
             modelmanager_sendto_txt2img,
             0,

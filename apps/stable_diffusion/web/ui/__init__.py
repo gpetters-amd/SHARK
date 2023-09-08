@@ -79,15 +79,15 @@ from apps.stable_diffusion.web.ui.stablelm_ui import (
     llm_chat_api,
 )
 from apps.stable_diffusion.web.ui.generate_config import model_config_web
-from apps.stable_diffusion.web.ui.minigpt4_ui import minigpt4_web
-from apps.stable_diffusion.web.ui.outputgallery_ui import (
-    outputgallery_web,
-    outputgallery_tab_select,
-    outputgallery_watch,
-    outputgallery_filename,
-    outputgallery_sendto_txt2img,
-    outputgallery_sendto_img2img,
-    outputgallery_sendto_inpaint,
-    outputgallery_sendto_outpaint,
-    outputgallery_sendto_upscaler,
-)
+# from apps.stable_diffusion.web.ui.minigpt4_ui import minigpt4_web
+# from apps.stable_diffusion.web.ui.outputgallery_ui import (
+#     outputgallery_web,
+#     outputgallery_tab_select,
+#     outputgallery_watch,
+#     outputgallery_filename,
+#     outputgallery_sendto_txt2img,
+#     outputgallery_sendto_img2img,
+#     outputgallery_sendto_inpaint,
+#     outputgallery_sendto_outpaint,
+#     outputgallery_sendto_upscaler,
+# )

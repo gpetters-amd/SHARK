@@ -9,7 +9,7 @@ sys.setrecursionlimit(sys.getrecursionlimit() * 5)
 # python path for pyinstaller
 pathex = [
     ".",
-    "./apps/language_models/langchain",
+    # "./apps/language_models/langchain",
     # "./apps/language_models/src/pipelines/minigpt4_utils",
 ]
 
@@ -44,7 +44,7 @@ datas += collect_data_files("gradio_client")
 datas += collect_data_files("iree")
 datas += collect_data_files("google_cloud_storage")
 datas += collect_data_files("shark", include_py_files=True)
-datas += collect_data_files("timm", include_py_files=True)
+#datas += collect_data_files("timm", include_py_files=True)
 datas += collect_data_files("tqdm")
 datas += collect_data_files("tkinter")
 datas += collect_data_files("webview")

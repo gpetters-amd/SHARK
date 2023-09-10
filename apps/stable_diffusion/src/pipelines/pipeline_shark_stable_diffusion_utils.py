@@ -749,6 +749,7 @@ def get_unweighted_text_embeddings(
         # Convert the result to tensor
         # text_embeddings = pipe.text_encoder(text_input)[0]
         formatted_text_input = torch.cat([text_input, text_input])
+        print("INPUT CHUNK: " + str(formatted_text_input.shape) + ", " + str(formatted_text_input.dtype))
         text_embeddings = pipe.text_encoder(
             "forward", (formatted_text_input,)
         )[0]

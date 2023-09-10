@@ -575,5 +575,8 @@ def get_iree_runtime_config(device):
         # metal devices have a failure with caching allocators atm. blcking this util it gets fixed upstream.
         allocators=shark_args.device_allocator if device != "metal" else None,
     )
+    print("DEVICE: " + str(device))
+    print("HALDEVICE: " + str(haldevice))
     config = ireert.Config(device=haldevice)
+    print("CONFIG: " + str(config))
     return config

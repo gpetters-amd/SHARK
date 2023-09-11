@@ -447,6 +447,7 @@ class StableDiffusionPipeline:
                 "the batch size of `prompt`."
             )
 
+        print("PROMPT: " + str(prompt))
         text_embeddings, uncond_embeddings = get_weighted_text_embeddings(
             pipe=self,
             prompt=prompt,
@@ -455,6 +456,7 @@ class StableDiffusionPipeline:
             else None,
             max_embeddings_multiples=max_embeddings_multiples,
         )
+        print("EMBEDDINGS: " + str(text_embeddings))
         # SHARK: we are not using num_images_per_prompt
         # bs_embed, seq_len, _ = text_embeddings.shape
         # text_embeddings = text_embeddings.repeat(

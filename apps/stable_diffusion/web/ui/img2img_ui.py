@@ -457,6 +457,7 @@ with gr.Blocks(title="Image-to-Image") as img2img_web:
                                 "openpose",
                                 "scribble",
                                 "normal",
+                                "zoedepth",
                             ],
                         )
 

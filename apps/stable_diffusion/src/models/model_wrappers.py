@@ -84,7 +84,7 @@ class SharkifyStableDiffusionModel:
         generate_vmfb: bool = True,
         is_inpaint: bool = False,
         is_upscaler: bool = False,
-        use_stencil: str = None,
+        stencils: list[str] = [],
         use_lora: str = "",
         use_quantize: str = None,
         return_mlir: bool = False,
@@ -143,7 +143,7 @@ class SharkifyStableDiffusionModel:
         self.low_cpu_mem_usage = low_cpu_mem_usage
         self.is_inpaint = is_inpaint
         self.is_upscaler = is_upscaler
-        self.use_stencil = get_stencil_model_id(use_stencil)
+        self.stencils = [get_stencil_model_id(x) for x in stencils]
         if use_lora != "":
             self.model_name = self.model_name + "_" + get_path_stem(use_lora)
         self.use_lora = use_lora
@@ -194,8 +194,9 @@ class SharkifyStableDiffusionModel:
                     )
                 if self.base_vae:
                     sub_model = "base_vae"
-            if "stencil_adaptor" == model and self.use_stencil is not None:
-                model_config = model_config + get_path_stem(self.use_stencil)
+            # TODO: Fix this
+            # if "stencil_adaptor" == model and self.use_stencil is not None:
+            #     model_config = model_config + get_path_stem(self.use_stencil)
             model_name[model] = get_extended_name(sub_model + model_config)
             index += 1
         return model_name
@@ -380,23 +381,31 @@ class SharkifyStableDiffusionModel:
                 control12,
                 control13,
             ):
+                # TODO: Average pooling
+                db_res_samples = [
+                    control1,
+                    control2,
+                    control3,
+                    control4,
+                    control5,
+                    control6,
+                    control7,
+                    control8,
+                    control9,
+                    control10,
+                    control11,
+                    control12,
+                ]
+                db_res_sample_shapes = [x.shape for x in db_res_samples]
+                db_res_samples = [
+                    torch.broadcast_to(
+                        torch.mean(x, dim=(2, 3), keepdim=True), y
+                    )
+                    for (x, y) in zip(db_res_samples, db_res_sample_shapes)
+                ]
+
                 # expand the latents if we are doing classifier-free guidance to avoid doing two forward passes.
-                db_res_samples = tuple(
-                    [
-                        control1,
-                        control2,
-                        control3,
-                        control4,
-                        control5,
-                        control6,
-                        control7,
-                        control8,
-                        control9,
-                        control10,
-                        control11,
-                        control12,
-                    ]
-                )
+                db_res_samples = tuple(db_res_samples)
                 mb_res_samples = control13
                 latents = torch.cat([latent] * 2)
                 unet_out = self.unet.forward(
@@ -461,11 +470,11 @@ class SharkifyStableDiffusionModel:
         )
         return shark_controlled_unet, controlled_unet_mlir
 
-    def get_control_net(self, use_large=False):
+    def get_control_net(self, stencil_id, use_large=False):
+        stencil_id = get_stencil_model_id(stencil_id)
+
         class StencilControlNetModel(torch.nn.Module):
-            def __init__(
-                self, model_id=self.use_stencil, low_cpu_mem_usage=False
-            ):
+            def __init__(self, model_id=stencil_id, low_cpu_mem_usage=False):
                 super().__init__()
                 self.cnet = ControlNetModel.from_pretrained(
                     model_id,
@@ -810,7 +819,10 @@ class SharkifyStableDiffusionModel:
 
     def unet(self, use_large=False):
         try:
-            model = "stencil_unet" if self.use_stencil is not None else "unet"
+            stencil_count = 0
+            for stencil in self.stencils:
+                stencil_count += 1
+            model = "stencil_unet" if stencil_count > 0 else "unet"
             compiled_unet = None
             unet_inputs = base_models[model]
 
@@ -879,13 +891,13 @@ class SharkifyStableDiffusionModel:
         except Exception as e:
             sys.exit(e)
 
-    def controlnet(self, use_large=False):
+    def controlnet(self, stencil_id, use_large=False):
         try:
             self.inputs["stencil_adaptor"] = self.get_input_info_for(
                 base_models["stencil_adaptor"]
             )
             compiled_stencil_adaptor, controlnet_mlir = self.get_control_net(
-                use_large=use_large
+                stencil_id, use_large=use_large
             )
 
             check_compilation(compiled_stencil_adaptor, "Stencil")

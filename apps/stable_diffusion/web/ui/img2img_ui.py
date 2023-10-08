@@ -527,7 +527,7 @@ with gr.Blocks(title="Image-to-Image") as img2img_web:
                 #     )
 
                 with gr.Accordion(label="Multistencil Options", open=False):
-                    choices = ["None", "canny", "openpose", "scribble"]
+                    choices = ["None", "canny", "openpose", "scribble", "zoedepth"]
 
                     def cnet_preview(checked, model, input_image, index):
                         global stencils

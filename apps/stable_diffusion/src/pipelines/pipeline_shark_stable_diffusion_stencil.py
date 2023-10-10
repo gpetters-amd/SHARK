@@ -65,6 +65,8 @@ class StencilPipeline(StableDiffusionPipeline):
         self.controlnet_names = controlnet_names
 
     def load_controlnet(self, index, model_name):
+        if model_name is None:
+            return
         if (
             self.controlnet[index] is not None
             and self.controlnet_id[index] is not None
@@ -175,6 +177,8 @@ class StencilPipeline(StableDiffusionPipeline):
             # Multicontrolnet
             control = None
             for i, controlnet_hint in enumerate(stencil_hints):
+                if controlnet_hint is None:
+                    continue
                 if text_embeddings.shape[1] <= self.model_max_length:
                     subcontrol = self.controlnet[i](
                         "forward",

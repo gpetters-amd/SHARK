@@ -34,6 +34,7 @@ from apps.stable_diffusion.src.utils import (
 from apps.stable_diffusion.src.utils.stencils import (
     CannyDetector,
     OpenposeDetector,
+    ZoeDetector,
 )
 from apps.stable_diffusion.web.utils.common_label_calc import status_label
 import numpy as np
@@ -548,6 +549,10 @@ with gr.Blocks(title="Image-to-Image") as img2img_web:
                                 result = openpose(np.array(input_image))
                                 # TODO: This is just an empty canvas, need to draw the candidates (which are in result[1])
                                 return [Image.fromarray(result[0]), result]
+                            case "zoedepth":
+                                zoedepth = ZoeDetector()
+                                result = zoedepth(np.array(input_image))
+                                return [Image.fromarray(result)]
                             case _:
                                 return None
 

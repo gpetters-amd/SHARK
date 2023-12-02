@@ -3,7 +3,7 @@
 
 numpy>1.22.4
 pytorch-triton
-torchvision 
+torchvision
 tabulate
 
 tqdm
@@ -39,3 +39,6 @@ scipy
 #psutil
 #onnx-weekly
 #ort-nightly
+
+# MiniGPT4
+timm

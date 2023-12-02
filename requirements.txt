@@ -40,7 +40,6 @@ sentencepiece
 py-cpuinfo
 tiktoken # for codegen
 joblib # for langchain
-timm # for MiniGPT4
 langchain
 einops # for zoedepth
 pydantic==2.4.1 # pin until pyinstaller-hooks-contrib works with beta versions

@@ -3,7 +3,6 @@ from PIL import Image
 import torch
 import os
 from pathlib import Path
-import torchvision
 import time
 from apps.stable_diffusion.src.utils.stencils import (
     CannyDetector,
@@ -34,6 +33,8 @@ def save_img(img):
         img = Image.fromarray(img)
         img.save(os.path.join(subdir, str(int(time.time())) + ".png"))
     else:
+        import torchvision
+
         converter = torchvision.transforms.ToPILImage()
         for i in img:
             converter(i).save(

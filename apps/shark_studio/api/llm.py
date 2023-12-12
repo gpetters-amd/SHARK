@@ -2,8 +2,12 @@ from turbine_models.custom_models import stateless_llama
 from turbine_models.model_runner import vmfbRunner
 from turbine_models.gen_external_params.gen_external_params import gen_external_params
 import time
-from shark.iree_utils.compile_utils import compile_module_to_flatbuffer
-from apps.shark_studio.web.utils import get_resource_path
+from shark.iree_utils.compile_utils import (
+    get_iree_compiled_module,
+    load_vmfb_using_mmap,
+    compile_module_to_flatbuffer,
+)
+from apps.shark_studio.web.utils.file_utils import get_resource_path
 import iree.runtime as ireert
 from itertools import chain
 import gc

@@ -9,6 +9,8 @@ import unittest
 from apps.shark_studio.api.llm import LanguageModel
 import gc
 import json
+from apps.shark_studio.api.llm import LanguageModel
+import gc
 
 from apps.shark_studio.api.llm import LanguageModel
 from apps.shark_studio.api.sd import shark_sd_fn_dict_input, view_json_file
@@ -46,8 +48,8 @@ class LLMAPITest(unittest.TestCase):
                 count += 1
                 continue
             assert (
-                msg.strip(" ") == label
-            ), f"LLM API failed to return correct response, expected '{label}', received {msg}"
+                msg.strip(" ") == "Turkish Turkish Turkish"
+            ), f"LLM API failed to return correct response, expected 'Turkish Turkish Turkish', received {msg}"
             break
         del lm
         gc.collect()

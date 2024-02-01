@@ -48,8 +48,8 @@ class LLMAPITest(unittest.TestCase):
                 count += 1
                 continue
             assert (
-                msg.strip(" ") == "Turkish Turkish Turkish"
-            ), f"LLM API failed to return correct response, expected 'Turkish Turkish Turkish', received {msg}"
+                msg.strip(" ") == label
+            ), f"LLM API failed to return correct response, expected '{label}', received {msg}"
             break
         del lm
         gc.collect()
